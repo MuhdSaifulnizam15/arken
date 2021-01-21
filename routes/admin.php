@@ -1,3 +1,4 @@
+<?php
 Route::group(['prefix' => 'admin'], function() {
     
     Route::get('login', 'Admin\LoginController@showLoginForm')->name('admin.login');

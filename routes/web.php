@@ -11,10 +11,10 @@
 |
 */
 
+// Auth::routes(['verify' => true]);
+
 require 'admin.php';
 
-Auth::routes(['verify' => true]);
-
-Route::get('/', function () {
-    return view('admin.dashboard');
-});
+// Route::get('/', function () {
+//     return view('admin.dashboard');
+// });
