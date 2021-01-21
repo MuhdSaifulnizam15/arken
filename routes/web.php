@@ -11,6 +11,8 @@
 |
 */
 
+require 'admin.php';
+
 Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
