@@ -98,13 +98,9 @@
     </ul>
 
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-      <a href="{{ route('logout') }}" class="btn btn-danger btn-lg btn-block btn-icon-split" onclick="event.preventDefault();
-         document.getElementById('logout-form').submit();">
+      <a href="{{ route('admin.logout') }}" class="btn btn-danger btn-lg btn-block btn-icon-split">
         <i class="fas fa-sign-out-alt"></i> Logout
       </a>
-      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-          @csrf
-      </form>
     </div>
   </aside>
 </div>
