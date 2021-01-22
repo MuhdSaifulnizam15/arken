@@ -17,6 +17,7 @@ window.moment = require('moment');
 require('popper.js');
 require('bootstrap');
 require('jquery.nicescroll');
+require('datatables.net-bs4');
 
 require('./stisla/stisla');
 require('./stisla/scripts');
