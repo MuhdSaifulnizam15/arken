@@ -1,4 +1,5 @@
-<form id="setting-form">
+<form id="setting-form" action="{{ route('admin.settings.update') }}"  method="POST" role="form">
+    @csrf
     <div class="card" id="settings-card">
         <div class="card-header">
             <h4>General Settings</h4>
