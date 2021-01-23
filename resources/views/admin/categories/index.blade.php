@@ -1,11 +1,11 @@
 @extends('admin.layouts.app')
 
-@section('title', 'List Categories')
+@section('title') {{ $pageTitle }} @endsection
 
 @section('content')
 <section class="section">
   <div class="section-header">
-    <h1>List Categories</h1>
+    <h1>{{ $pageTitle }}</h1>
   </div>
 
   @include('admin.partials.flash')
@@ -15,7 +15,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h4>List of Categories</h4>
+            <h4>{{ $subTitle }}</h4>
           </div>
           <div class="card-body">
             <div class="table-responsive">
