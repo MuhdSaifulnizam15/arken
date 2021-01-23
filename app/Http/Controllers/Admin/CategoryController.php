@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Contracts\CategoryContract;
 use App\Http\Controllers\BaseController;
-use Models\Category;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use DataTables;
 
 /**
  * Class CategoryController
@@ -13,116 +17,47 @@ use Models\Category;
 class CategoryController extends BaseController
 {
     /**
-     * CategoryRepository constructor.
-     * @param Category $model
+     * @var CategoryContract
      */
-    public function __construct(Category $model)
+    protected $categoryRepository;
+
+    /**
+     * CategoryController constructor.
+     * @param CategoryContract $categoryRepository
+     */
+    public function __construct(CategoryContract $categoryRepository)
     {
-        parent::__construct($model);
-        $this->model = $model;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
-     * @param string $order
-     * @param string $sort
-     * @param array $columns
-     * @return mixed
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function listCategories(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
+    public function index(Request $request)
     {
-        return $this->all($columns, $order, $sort);
-    }
-
-    /**
-     * @param int $id
-     * @return mixed
-     * @throws ModelNotFoundException
-     */
-    public function findCategoryById(int $id)
-    {
-        try {
-            return $this->findOneOrFail($id);
-
-        } catch (ModelNotFoundException $e) {
-
-            throw new ModelNotFoundException($e);
-        }
-    }
-
-    /**
-     * @param array $params
-     * @return Category|mixed
-     */
-    public function createCategory(array $params)
-    {
-        try {
-            $collection = collect($params);
-            
-            $image = null;
-
-            if ($collection->has('image') && ($params['image'] instanceof  UploadedFile)) {
-                $image = $this->uploadOne($params['image'], 'categories');
-            }
-
-            $featured = $collection->has('featured') ? 1 : 0;
-            $menu = $collection->has('menu') ? 1 : 0;
-
-            $merge = $collection->merge(compact('menu', 'image', 'featured'));
-
-            $category = new Category($merge->all());
-
-            $category->save();
-
-            return $category;
-
-        } catch (QueryException $exception) {
-            throw new InvalidArgumentException($exception->getMessage());
-        }
-    }
-
-    /**
-     * @param array $params
-     * @return mixed
-     */
-    public function updateCategory(array $params)
-    {
-        $category = $this->findCategoryById($params['id']);
-
-        $collection = collect($params)->except('_token');
-
-        if ($collection->has('image') && ($params['image'] instanceof  UploadedFile)) {
-
-            if ($category->image != null) {
-                $this->deleteOne($category->image);
-            }
-
-            $image = $this->uploadOne($params['image'], 'categories');
+        $categories = $this->categoryRepository->listCategories();
+        $this->setPageTitle('Categories', 'List of all categories');
+        
+        if($request->ajax()){
+            $data = Category::latest()
+                        ->where('id', '!=', '1')
+                        ->get();
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($data){
+                        $btn = '<a href="#" class="btn btn-outline-primary m-1"><i class="fa fa-edit"></i></a>';
+                        $btn .=  '<a href="#" class="btn btn-outline-danger m-1"><i class="fa fa-trash"></i></a>';
+                        return $btn;
+                    })
+                    ->addColumn('parent_name', function($data){
+                        return $data->parent->name;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
         }
 
-        $featured = $collection->has('featured') ? 1 : 0;
-        $menu = $collection->has('menu') ? 1 : 0;
-
-        $merge = $collection->merge(compact('menu', 'image', 'featured'));
-
-        $category->update($merge->all());
-
-        return $category;
-    }
-
-    /**
-     * @param $id
-     * @return bool|mixed
-     */
-    public function deleteCategory($id)
-    {
-        $category = $this->findCategoryById($id);
-
-        if ($category->image != null) {
-            $this->deleteOne($category->image);
-        }
-
-        $category->delete();
-
-        return $category;
+        return view('admin.categories.index', $categories);
     }
 }
