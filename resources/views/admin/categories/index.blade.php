@@ -14,8 +14,9 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header justify-content-between">
             <h4>{{ $subTitle }}</h4>
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-outline-primary">Create Category</a>
           </div>
           <div class="card-body">
             <div class="table-responsive">
