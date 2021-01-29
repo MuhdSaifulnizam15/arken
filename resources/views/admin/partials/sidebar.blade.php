@@ -22,6 +22,12 @@
               <span>Categories</span>
             </a>
           </li>
+          <li class="{{ Route::currentRouteName() == 'admin.attributes.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.attributes.index') }}" class="nav-link">
+              <i class="fas fa fa-th"></i>
+              <span>Attributes</span>
+            </a>
+          </li>
           <!-- <li class="nav-item dropdown">
             <a href="#" class="nav-link has-dropdown">
               <i class="fas fa-tasks"></i>
