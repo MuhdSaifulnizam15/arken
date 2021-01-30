@@ -20,6 +20,7 @@
                     <div class="card-body">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item"><a href="#general" class="nav-link active" data-toggle="tab">General</a></li>
+                            <li class="nav-item"><a href="#values" class="nav-link" data-toggle="tab">Attribute Values</a></li>
                         </ul>
                     </div>
                 </div>
@@ -32,6 +33,9 @@
                         @csrf
                         @include('admin.attributes.includes.general')
                         </form>
+                    </div>
+                    <div class="tab-pane" id="values">
+                        @include('admin.attributes.includes.attributeValue')
                     </div>
                 </div>
             </div>
