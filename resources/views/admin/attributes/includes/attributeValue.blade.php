@@ -32,7 +32,9 @@
     </div>
     <div class="card-footer bg-whitesmoke text-md-right">
         <button class="btn btn-primary" id="save-btn">Save Changes</button>
+        <button class="btn btn-primary" id="update-btn" hidden>Update Changes</button>
         <a class="btn btn-outline-secondary" href="{{ route('admin.attributes.index') }}"><i class="fas fa-trash mr-2"></i>Cancel</a>
+        <button class="btn btn-outline-secondary" id="reset-btn" hidden>Reset</button>
     </div>
 </div>
 
@@ -75,6 +77,7 @@
                 success: function(dataResult){
                     console.log(dataResult);
                     // var resultData = dataResult.data;
+                    $("#bodyData").empty();
                     var bodyData = '';
                     var i=1;
                     $.each(dataResult,function(index,row){
@@ -87,12 +90,37 @@
                             bodyData += row.price;
                         }     
                         bodyData += "</td>" +
-                                    "<td> <a class='btn btn-outline-primary edit m-1'><i class='fa fa-edit'></i></a>" + 
-                                    "<a class='btn btn-outline-danger delete m-1'><i class='fa fa-trash'></i></a></td>" +
+                                    "<td> <a class='btn btn-outline-primary edit m-1' data-id=" + row.id + "><i class='fa fa-edit'></i></a>" + 
+                                    "<a class='btn btn-outline-danger delete m-1' id=" + row.id +"><i class='fa fa-trash'></i></a></td>" +
                                     "</tr>";
                         
                     })
                     $("#bodyData").append(bodyData);
+                }
+            });
+        });
+    }
+
+    // Delete records
+    function deleteRecords(id){    
+        $(document).ready(function() {
+            $.ajax({
+                url: "/admin/attributes/delete-values",
+                type: "POST",
+                data:{
+                    _token:'{{ csrf_token() }}',
+                    id: id
+                },
+                cache: false,
+                dataType: 'json',
+                success: function(dataResult){
+                    console.log(dataResult);
+                    swal({  
+                        icon: dataResult.status,
+                        title: dataResult.message,
+                        timer: 3000,
+                    });
+                    fetchRecords();
                 }
             });
         });
@@ -116,11 +144,46 @@
                 dataType: 'json',
                 success: function(dataResult){
                     console.log('dataResult', dataResult);
-                    $("#bodyData").empty();
                     fetchRecords();
                 }
             });
         }
+    });
+
+    // On Click Edit Button
+    $(document).on("click", ".edit", function() {
+        // Show Reset and Update button
+        $('#reset-btn').removeAttr('hidden');
+        $('#update-btn').removeAttr('hidden');
+
+        $('input[name=price]').val();
+
+        // Hide Save button
+        $('#save-btn').attr('hidden', true);
+    });
+
+    // On Click Update Button
+    $(document).on("click", "#update-btn", function() {
+        // Hide Update and Reset Btn
+        $('#reset-btn').attr('hidden', true);
+        $('#update-btn').attr('hidden', true);
+    });
+
+    // On Click Delete Button
+    $(document).on("click", ".delete", function() {
+        var id = $(this).attr("id");
+        swal({
+            title: 'Are you sure you want to delete this?',
+            text: 'This action cant be undo',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if(willDelete) {
+                deleteRecords(id);
+            }
+        });
     });
 </script>
 @endsection
