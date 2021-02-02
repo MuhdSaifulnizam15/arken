@@ -20,7 +20,9 @@
                     <div class="card-body">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item"><a href="#general" class="nav-link active" data-toggle="tab">General</a></li>
-                            <li class="nav-item"><a href="#values" class="nav-link" data-toggle="tab">Attribute Values</a></li>
+                            @isset($attribute)
+                                <li class="nav-item"><a href="#values" class="nav-link" data-toggle="tab">Attribute Values</a></li>
+                            @endisset
                         </ul>
                     </div>
                 </div>
@@ -34,9 +36,11 @@
                         @include('admin.attributes.includes.general')
                         </form>
                     </div>
-                    <div class="tab-pane" id="values">
-                        @include('admin.attributes.includes.attributeValue')
-                    </div>
+                    @isset($attribute)
+                        <div class="tab-pane" id="values">
+                            @include('admin.attributes.includes.attributeValue')
+                        </div>
+                    @endisset
                 </div>
             </div>
         </div>
