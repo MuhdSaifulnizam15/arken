@@ -35,7 +35,18 @@ class AttributeValueController extends Controller
         $value->price = $request->input('price');
         $value->save();
 
-        return response()->json($value);
+        return response()->json(['data' => $value, 'status' => 'success', 'message' => 'Attribute value added successfully.']);
+    }
+
+    public function updateValues(Request $request)
+    {
+        $attributeValue = AttributeValue::findOrFail($request->input('valueId'));
+        $attributeValue->attribute_id = $request->input('id');
+        $attributeValue->value = $request->input('value');
+        $attributeValue->price = $request->input('price');
+        $attributeValue->save();
+    
+        return response()->json(['data' => $attributeValue, 'status' => 'success', 'message' => 'Attribute value updated successfully.']);
     }
 
     public function deleteValues(Request $request)

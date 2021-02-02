@@ -31,9 +31,9 @@
         </div>
     </div>
     <div class="card-footer bg-whitesmoke text-md-right">
-        <button class="btn btn-primary" id="save-btn">Save Changes</button>
+        <button class="btn btn-primary" id="saving-btn">Save Changes</button>
         <button class="btn btn-primary" id="update-btn" hidden>Update Changes</button>
-        <a class="btn btn-outline-secondary" href="{{ route('admin.attributes.index') }}"><i class="fas fa-trash mr-2"></i>Cancel</a>
+        <a class="btn btn-outline-secondary" id="cancel-btn" href="{{ route('admin.attributes.index') }}"><i class="fas fa-trash mr-2"></i>Cancel</a>
         <button class="btn btn-outline-secondary" id="reset-btn" hidden>Reset</button>
     </div>
 </div>
@@ -90,7 +90,7 @@
                             bodyData += row.price;
                         }     
                         bodyData += "</td>" +
-                                    "<td> <a class='btn btn-outline-primary edit m-1' data-id=" + row.id + "><i class='fa fa-edit'></i></a>" + 
+                                    "<td> <a class='btn btn-outline-primary edit m-1' id=" + row.id + " data-value=" + row.value + " data-price=" + row.price + "><i class='fa fa-edit'></i></a>" + 
                                     "<a class='btn btn-outline-danger delete m-1' id=" + row.id +"><i class='fa fa-trash'></i></a></td>" +
                                     "</tr>";
                         
@@ -101,8 +101,34 @@
         });
     }
 
+    // Add records
+    function addRecord(value, price){    
+        $(document).ready(function() {
+            $.ajax({
+                url: "/admin/attributes/add-values",
+                type: "POST",
+                data:{
+                    _token:'{{ csrf_token() }}',
+                    id: '{{ $attribute->id }}',
+                    value: value,
+                    price: price,
+                },
+                dataType: 'json',
+                success: function(dataResult){
+                    console.log('dataResult', dataResult);
+                    swal({  
+                        icon: dataResult.status,
+                        title: dataResult.message,
+                        timer: 3000,
+                    });
+                    fetchRecords();
+                }
+            });
+        });
+    }
+
     // Delete records
-    function deleteRecords(id){    
+    function deleteRecord(id){    
         $(document).ready(function() {
             $.ajax({
                 url: "/admin/attributes/delete-values",
@@ -126,47 +152,90 @@
         });
     }
 
-    // Add record
-    $(document).on("click", "#save-btn", function() {
-        var value = $('input[name=value]').val();
-        var price = $('input[name=price]').val();
-        console.log('value, price', value + " " + price + " " + {{ $attribute->id }});
-        if(value != '' && price != ''){
+    // Update records
+    function updateRecord(id, value, price){  
+        $(document).ready(function() {
             $.ajax({
-                url: "/admin/attributes/add-values",
+                url: "/admin/attributes/update-values",
                 type: "POST",
                 data:{
                     _token:'{{ csrf_token() }}',
                     id: '{{ $attribute->id }}',
                     value: value,
                     price: price,
+                    valueId: id
                 },
+                cache: false,
                 dataType: 'json',
                 success: function(dataResult){
-                    console.log('dataResult', dataResult);
+                    console.log(dataResult);
+                    swal({  
+                        icon: dataResult.status,
+                        title: dataResult.message,
+                        timer: 3000,
+                    });
                     fetchRecords();
                 }
             });
-        }
-    });
+        });
+    }
 
     // On Click Edit Button
     $(document).on("click", ".edit", function() {
         // Show Reset and Update button
         $('#reset-btn').removeAttr('hidden');
         $('#update-btn').removeAttr('hidden');
-
-        $('input[name=price]').val();
+        var id = $(this).attr("id");
+        var price = $(this).data("price");
+        var value = $(this).data("value");
+        // console.log('id value price', id + " " + price + " " + value)
+        $('input[name=price]').val(price);
+        $('input[name=value]').val(value);
+        $('input[name=id]').val(id).attr('type', 'hidden');
 
         // Hide Save button
-        $('#save-btn').attr('hidden', true);
+        $('#saving-btn').attr("hidden", true);
+        $('#cancel-btn').attr('hidden', true);
     });
 
     // On Click Update Button
     $(document).on("click", "#update-btn", function() {
+        swal({  
+            icon: "warning",
+            title: "Are you sure you want to update this attribute value?",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                // Hide Update and Reset Btn, Show Cancel and Save Btn
+                $('#reset-btn').attr('hidden', true);
+                $('#update-btn').attr('hidden', true);
+                $('#saving-btn').attr('hidden', false);
+                $('#cancel-btn').attr('hidden', false);
+
+                var price = $('input[name=price]').val();
+                var value = $('input[name=value]').val();
+                var id = $('input[name=id]').val();
+                console.log('id value price', id + " " + price + " " + value + " " +  {{ $attribute->id }} );
+
+                updateRecord(id, value, price);
+            }
+        });
+    });
+
+    // On Click Reset Button
+    $(document).on("click", "#reset-btn", function() {
         // Hide Update and Reset Btn
         $('#reset-btn').attr('hidden', true);
         $('#update-btn').attr('hidden', true);
+        $('#saving-btn').attr('hidden', false);
+        $('#cancel-btn').attr('hidden', false);
+
+        $('input[name=price]').val('');
+        $('input[name=value]').val('');
+
+        // updateRecord(id, value, price);
     });
 
     // On Click Delete Button
@@ -181,9 +250,21 @@
         })
         .then((willDelete) => {
             if(willDelete) {
-                deleteRecords(id);
+                deleteRecord(id);
             }
         });
+    });
+
+    // Add record
+    $(document).on("click", "#saving-btn", function() {
+        var value = $('input[name=value]').val();
+        var price = $('input[name=price]').val();
+        console.log('value, price', value + " " + price + " " + {{ $attribute->id }});
+        if(value != '' && price != ''){
+            addRecord(value, price);
+            $('input[name=value]').val('');
+            $('input[name=price]').val('');
+        }
     });
 </script>
 @endsection

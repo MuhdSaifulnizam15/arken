@@ -26,7 +26,7 @@
                     <th style="width:10px, min-width:10px;"></th>
                     <th>Code</th>
                     <th>Name</th>
-                    <th>frontend Type</th>
+                    <th>Frontend Type</th>
                     <th>Filterable</th>
                     <th>Required</th>
                     <th style="width:120px; min-width:120px;" class="text-danger text-center"><i class="fa fa-bolt"></i></th>
