@@ -28,6 +28,12 @@
               <span>Attributes</span>
             </a>
           </li>
+          <li class="{{ Route::currentRouteName() == 'admin.brands.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.brands.index') }}" class="nav-link">
+              <i class="fas fa fa-briefcase"></i>
+              <span>Brands</span>
+            </a>
+          </li>
           <!-- <li class="nav-item dropdown">
             <a href="#" class="nav-link has-dropdown">
               <i class="fas fa-tasks"></i>
