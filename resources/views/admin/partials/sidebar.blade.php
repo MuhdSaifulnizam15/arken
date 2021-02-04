@@ -34,6 +34,12 @@
               <span>Brands</span>
             </a>
           </li>
+          <li class="{{ Route::currentRouteName() == 'admin.products.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.products.index') }}" class="nav-link">
+              <i class="fas fa fa-box-open"></i>
+              <span>Products</span>
+            </a>
+          </li>
           <!-- <li class="nav-item dropdown">
             <a href="#" class="nav-link has-dropdown">
               <i class="fas fa-tasks"></i>
