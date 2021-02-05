@@ -9,6 +9,7 @@ use App\Contracts\BrandContract;
 use App\Contracts\CategoryContract;
 use App\Contracts\ProductContract;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\StoreProductFormRequest;
 use DataTables;
 
 class ProductController extends BaseController
@@ -51,14 +52,14 @@ class ProductController extends BaseController
                     ->addColumn('categories', function($data){
                         $productCategories = '';
                         foreach ($data->categories as $category) {
-                            $productCategories .= '<span class="badge badge-info">' . $category->name . '</span>';
+                            $productCategories .= '<span class="badge badge-primary m-1">' . $category->name . '</span>';
                         }
                         return $productCategories;
                     })
                     ->addColumn('productPrice', function($data){
-                        return config('settings.currency_symbol') . $data->price;
+                        return config('settings.currency_symbol') . ' ' . $data->price;
                     })
-                    ->rawColumns(['action'])
+                    ->rawColumns(['action', 'categories'])
                     ->make(true);
         }
 
@@ -73,5 +74,16 @@ class ProductController extends BaseController
 
         $this->setPageTitle('Products', 'Create Product');
         return view('admin.products.create', compact('categories', 'brands', 'edit'));
+    }
+
+    public function store(StoreProductFormRequest $request)
+    {
+        $params = $request->except('_token');
+        $product = $this->productRepository->createProduct($params);
+
+        if (!$product) {
+            return $this->responseRedirectBack('Error occurred while creating product.', 'error', true, true);
+        }
+        return $this->responseRedirect('admin.products.index', 'Product added successfully' ,'success',false, false);
     }
 }

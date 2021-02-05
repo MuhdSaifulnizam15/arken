@@ -58,7 +58,7 @@
                 { data: 'sku', name: 'sku'},
                 { data: 'name', name: 'name'},
                 { data: 'brand_name', name: 'brand_name'},
-                { data: 'categories', name: 'categories'},
+                { data: 'categories', name: 'categories', orderable: false },
                 { data: 'productPrice', name: 'productPrice'},
                 { 
                   data: 'status', 
