@@ -86,4 +86,27 @@ class ProductController extends BaseController
         }
         return $this->responseRedirect('admin.products.index', 'Product added successfully' ,'success',false, false);
     }
+
+    public function edit($id)
+    {
+        $product = $this->productRepository->findProductById($id);
+        $brands = $this->brandRepository->listBrands('name', 'asc');
+        $categories = $this->categoryRepository->listCategories('name', 'asc');
+        $edit = true;
+
+        $this->setPageTitle('Products', 'Edit Product');
+        return view('admin.products.create', compact('categories', 'brands', 'product', 'edit'));
+    }
+
+    public function update(StoreProductFormRequest $request)
+    {
+        $params = $request->except('_token');
+
+        $product = $this->productRepository->updateProduct($params);
+
+        if (!$product) {
+            return $this->responseRedirectBack('Error occurred while updating product.', 'error', true, true);
+        }
+        return $this->responseRedirect('admin.products.index', 'Product updated successfully' ,'success',false, false);
+    }
 }

@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
         @if($edit) 
-            <input type="hidden" name="id" value="{{ $product->id }}">
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
         @endif
         <div class="form-group row align-items-center">
             <label for="name" class="form-control-label col-sm-3 text-md-right">Name</label>
@@ -44,7 +44,11 @@
                 <select name="brand_id" id="brand_id" class="form-control @error('brand_id') is-invalid @enderror"">
                 <option value="0" selected>Select a brand</option>
                     @foreach($brands as $brand)
-                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                        @if($edit && $product->brand_id == $brand->id)
+                            <option value="{{ $brand->id }}" selected>{{ $brand->name }}</option>
+                        @else
+                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                        @endif
                     @endforeach
                 </select>
                 <div class="invalid-feedback active">
@@ -55,9 +59,14 @@
         <div class="form-group row align-items-center">
             <label for="categories" class="form-control-label col-sm-3 text-md-right">Categories</label>
             <div class="col-sm-6 col-md-9">
-                <select name="categories[]" id="categories" class="form-control select2" multiple="">
+                <select name="categories[]" id="categories" class="form-control select2" multiple>
                     @foreach($categories  as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @if($edit)
+                            @php $check = in_array($category->id, $product->categories->pluck('id')->toArray()) ? 'selected' : '' @endphp
+                            <option value="{{ $category->id }}" {{ $check }}>{{ $category->name }}</option>
+                        @else
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endif
                     @endforeach
                 </select>
             </div>
@@ -79,15 +88,15 @@
             </div>
         </div>
         <div class="form-group row align-items-center">
-            <label for="special_price" class="form-control-label col-sm-3 text-md-right">Special Price</label>
+            <label for="sale_price" class="form-control-label col-sm-3 text-md-right">Special Price</label>
             <div class="col-sm-6 col-md-9">
                 <input 
                     type="text"
                     class="form-control" 
-                    name="special_price" 
-                    id="special_price" 
+                    name="sale_price" 
+                    id="sale_price" 
                     placeholder="Enter product special price" 
-                    value="{{ $edit ? old('special_price', $product->special_price) : old('special_price') }}"
+                    value="{{ $edit ? old('sale_price', $product->sale_price) : old('sale_price') }}"
                 />
             </div>
         </div>
@@ -130,8 +139,7 @@
                     id="description" 
                     rows="8"
                     placeholder="Enter description" 
-                    value="{{ $edit ? old('description', $product->description) : old('description') }}"
-                ></textarea>
+                >{{ $edit ? old('description', $product->description) : old('description') }}</textarea>
             </div>
         </div>
         <div class="form-group row align-items-center">
@@ -142,7 +150,7 @@
                     name="status" 
                     id="status"
                     style="width:20px;height:20px;"
-                    {{ $edit ? $attribute->status == 1 ? "checked" : "" : "" }}
+                    {{ $edit ? $product->status == 1 ? "checked" : "" : "" }}
                 />
             </div>
         </div>
@@ -154,7 +162,7 @@
                     name="featured" 
                     id="featured"
                     style="width:20px;height:20px;"
-                    {{ $edit ? $attribute->featured == 1 ? "checked" : "" : "" }}
+                    {{ $edit ? $product->featured == 1 ? "checked" : "" : "" }}
                 />
             </div>
         </div>
