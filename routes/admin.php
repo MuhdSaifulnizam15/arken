@@ -53,8 +53,11 @@ Route::group(['prefix' => 'admin'], function() {
             Route::post('/store', 'Admin\ProductController@store')->name('admin.products.store');
             Route::get('/edit/{id}', 'Admin\ProductController@edit')->name('admin.products.edit');
             Route::post('/update', 'Admin\ProductController@update')->name('admin.products.update');       
-            Route::post('/{id}/delete', 'Admin\ProductController@delete')->name('admin.products.delete');       
-         });
+            Route::post('/{id}/delete', 'Admin\ProductController@delete')->name('admin.products.delete');
+            
+            Route::post('/dropzone/store', 'Admin\ProductImageController@store')->name('admin.products.dropzone.store');
+            Route::post('/delete-image', 'Admin\ProductImageController@delete');
+        });
 
         // Settings
         Route::get('/settings', 'Admin\SettingController@index')->name('admin.settings');
