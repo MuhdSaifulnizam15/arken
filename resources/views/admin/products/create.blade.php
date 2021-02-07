@@ -21,6 +21,9 @@
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item"><a href="#general" class="nav-link active" data-toggle="tab">General</a></li>
                             <li class="nav-item"><a href="#images" class="nav-link" data-toggle="tab">Images</a></li>
+                            @isset($product)
+                                <li class="nav-item"><a href="#attributes" class="nav-link" data-toggle="tab">Attributes</a></li>
+                            @endisset
                         </ul>
                     </div>
                 </div>
@@ -37,6 +40,11 @@
                     <div class="tab-pane" id="images">
                         @include('admin.products.includes.images')
                     </div>
+                    @isset($product)
+                        <div class="tab-pane" id="attributes">
+                            @include('admin.products.includes.attributes')
+                        </div>
+                    @endisset
                 </div>
             </div>
         </div>

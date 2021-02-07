@@ -57,6 +57,12 @@ Route::group(['prefix' => 'admin'], function() {
             
             Route::post('/dropzone/store', 'Admin\ProductImageController@store')->name('admin.products.dropzone.store');
             Route::post('/delete-image', 'Admin\ProductImageController@delete');
+
+            Route::get('/attributes/load', 'Admin\ProductAttributeController@loadAttributes');
+            Route::post('/attributes', 'Admin\ProductAttributeController@productAttributes');
+            Route::post('/attributes/values', 'Admin\ProductAttributeController@loadValues');
+            Route::post('/attributes/add', 'Admin\ProductAttributeController@addAttribute');
+            Route::post('/attributes/delete', 'Admin\ProductAttributeController@deleteAttribute');
         });
 
         // Settings
