@@ -60,9 +60,9 @@ Route::group(['prefix' => 'admin'], function() {
 
             Route::get('/attributes/load', 'Admin\ProductAttributeController@loadAttributes');
             Route::post('/attributes', 'Admin\ProductAttributeController@productAttributes');
-            Route::post('/attributes/values', 'Admin\ProductAttributeController@loadValues');
+            Route::get('/attributes/values', 'Admin\ProductAttributeController@loadValues');
             Route::post('/attributes/add', 'Admin\ProductAttributeController@addAttribute');
-            Route::post('/attributes/delete', 'Admin\ProductAttributeController@deleteAttribute');
+            Route::post('/attributes/delete-attribute-value', 'Admin\ProductAttributeController@deleteAttribute');
         });
 
         // Settings

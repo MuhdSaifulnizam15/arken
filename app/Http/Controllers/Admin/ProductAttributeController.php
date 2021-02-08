@@ -39,7 +39,7 @@ class ProductAttributeController extends Controller
     {
         $attribute = Attribute::findOrFail($request->id);
 
-        return response()->json($attribute->values);
+        return response()->json(['status' => true, 'data' => $attribute->values]);
     }
 
     /**
@@ -48,12 +48,19 @@ class ProductAttributeController extends Controller
      */
     public function addAttribute(Request $request)
     {
-        $productAttribute = ProductAttribute::create($request->data);
+        // $productAttribute = ProductAttribute::create($request->data);
+        $productAttribute = new ProductAttribute();
+        $productAttribute->attribute_id = $request->input('attribute_id');
+        $productAttribute->value = $request->input('value');
+        $productAttribute->quantity = $request->input('quantity');
+        $productAttribute->price = $request->input('price');
+        $productAttribute->product_id = $request->input('product_id');
+        $productAttribute->save();
 
         if ($productAttribute) {
-            return response()->json(['message' => 'Product attribute added successfully.']);
+            return response()->json(['data' => $productAttribute ,'status' => 'success', 'message' => 'Product attribute added successfully.']);
         } else {
-            return response()->json(['message' => 'Something went wrong while submitting product attribute.']);
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong while submitting product attribute.']);
         }
     }
 
@@ -63,7 +70,7 @@ class ProductAttributeController extends Controller
      */
     public function deleteAttribute(Request $request)
     {
-        $productAttribute = ProductAttribute::findOrFail($request->id);
+        $productAttribute = ProductAttribute::findOrFail($request->input('id'));
         $productAttribute->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Product attribute deleted successfully.']);

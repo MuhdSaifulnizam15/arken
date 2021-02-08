@@ -31,7 +31,7 @@
     @endif
 </div>
 
-@section('additional_js')
+@push('scripts')
 <script type="text/javascript">
     $('#categories').select2();
     Dropzone.options.dropzone =
@@ -115,4 +115,4 @@
         });
     });
 </script>
-@endsection
+@endpush
