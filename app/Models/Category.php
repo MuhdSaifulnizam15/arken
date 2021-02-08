@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use TypiCMS\NestableTrait;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
+    use NestableTrait;
+    
     protected $table = 'categories';
 
     protected $fillable = [
