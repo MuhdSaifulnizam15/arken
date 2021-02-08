@@ -17,6 +17,4 @@ require 'admin.php';
 
 Route::view('/', 'site.pages.homepage');
 
-// Route::get('/', function () {
-//     return view('admin.dashboard');
-// });
+Route::get('/category/{slug}', 'Site\CategoryController@show')->name('category.show');
