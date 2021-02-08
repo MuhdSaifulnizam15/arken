@@ -15,6 +15,8 @@ Auth::routes(['verify' => true]);
 
 require 'admin.php';
 
+Route::view('/', 'site.pages.homepage');
+
 // Route::get('/', function () {
 //     return view('admin.dashboard');
 // });
