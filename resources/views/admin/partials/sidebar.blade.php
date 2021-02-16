@@ -7,99 +7,72 @@
       <a href="index.html">{{ env('APP_SHORT_NAME') }}</a>
     </div>
     <ul class="sidebar-menu">
-      <li>
-        <a href="#" class="nav-link">
-          <i class="fas fa-fire"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
+        <li class="{{ Route::currentRouteName() == 'admin.dashboard' ? 'active' : '' }}">
+          <a href="{{ route('admin.dashboard') }}" class="nav-link">
+            <i class="fas fa-fire"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
 
-      <li class="menu-header">Content</li> 
-      <li class="nav-item dropdown active">
-        <li>
-          <a href="#" class="nav-link">
-            <i class="fas fa-file-archive"></i>
-            <span>Media</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="nav-link">
-            <i class="fas fa-syringe"></i>
-            <span>Daily Dose</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="nav-link">
-            <i class="fas fa-tools"></i>
-            <span>Quiz Builder</span>
-          </a>
-        </li>
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link has-dropdown">
-            <i class="fas fa-tasks"></i>
-            <span>Manage</span>
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-users"></i>
-                <span>Users</span>
-              </a>
+        <li class="menu-header">Content</li> 
+        <li class="nav-item dropdown active">
+          <li class="{{ Route::currentRouteName() == 'admin.categories.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.categories.index') }}" class="nav-link">
+              <i class="fas fa fa-tags"></i>
+              <span>Categories</span>
+            </a>
           </li>
-            <li>
-              <a href="#" class="nav-link">
-                <i class="far fa-file-word"></i>
-                <span>Quizzes</span>
-              </a>
+          <li class="{{ Route::currentRouteName() == 'admin.attributes.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.attributes.index') }}" class="nav-link">
+              <i class="fas fa fa-th"></i>
+              <span>Attributes</span>
+            </a>
+          </li>
+          <li class="{{ Route::currentRouteName() == 'admin.brands.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.brands.index') }}" class="nav-link">
+              <i class="fas fa fa-briefcase"></i>
+              <span>Brands</span>
+            </a>
+          </li>
+          <li class="{{ Route::currentRouteName() == 'admin.products.index' ? 'active' : '' }}">
+            <a href="{{ route('admin.products.index') }}" class="nav-link">
+              <i class="fas fa fa-box-open"></i>
+              <span>Products</span>
+            </a>
+          </li>
+          <!-- <li class="nav-item dropdown">
+            <a href="#" class="nav-link has-dropdown">
+              <i class="fas fa-tasks"></i>
+              <span>Manage</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#" class="nav-link">
+                  <i class="fas fa-users"></i>
+                  <span>Users</span>
+                </a>
             </li>
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-school"></i>
-                <span>Classes</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-user-graduate"></i>
-                <span>Students</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="nav-link">
-                <i class="far fa-paper-plane"></i>
-                <span>Assignments</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-book"></i>
-                <span>Subjects</span>
-              </a>
-            </li>
-          </ul>
+            </ul>
+          </li> -->
         </li>
-      </li>
 
-      <li class="menu-header">Settings</li> 
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link has-dropdown">
+        <li class="menu-header">Settings</li> 
+        <li class="{{ Route::currentRouteName() == 'admin.settings' ? 'active' : '' }}">
+          <a href="{{ route('admin.settings') }}" class="nav-link">
             <i class="fas fa-cogs"></i>
             <span>Settings</span>
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-user"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-          </ul>
+        </li>
+        <li>
+          <a href="#" class="nav-link">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+          </a>
         </li>
     </ul>
 
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-      <a href="{{ route('logout') }}" class="btn btn-danger btn-lg btn-block btn-icon-split" onclick="event.preventDefault();
-         document.getElementById('logout-form').submit();">
+      <a href="{{ route('admin.logout') }}" class="btn btn-danger btn-lg btn-block btn-icon-split">
         <i class="fas fa-sign-out-alt"></i> Logout
       </a>
       <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

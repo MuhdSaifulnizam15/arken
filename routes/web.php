@@ -13,6 +13,8 @@
 
 Auth::routes(['verify' => true]);
 
-Route::get('/', function () {
-    return view('admin.dashboard');
-});
+require 'admin.php';
+
+Route::view('/', 'site.pages.homepage');
+
+Route::get('/category/{slug}', 'Site\CategoryController@show')->name('category.show');

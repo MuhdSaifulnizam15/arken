@@ -17,6 +17,10 @@ window.moment = require('moment');
 require('popper.js');
 require('bootstrap');
 require('jquery.nicescroll');
+require('datatables.net-bs4');
+require('sweetalert');
+require('select2');
+require('dropzone');
 
 require('./stisla/stisla');
 require('./stisla/scripts');
@@ -52,3 +56,7 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/** Dropzone */
+
+window.Dropzone = require('dropzone');
